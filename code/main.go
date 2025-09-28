@@ -17,10 +17,39 @@ func getPlayerName() (string, error) {
 	return name, nil
 }
 
-func main() {
-	name, err := getPlayerName()
-	if err != nil {
-		log.Fatal("An error has occurred: %w", err)
+func getBet(balance uint) (uint, error) {
+	var bet uint
+	for {
+		fmt.Printf("Enter your bet (balance = $%d) or 0 to quit: ", balance)
+		_, err := fmt.Scan(&bet)
+		if err != nil {
+			return 0, fmt.Errorf("ERR: %w", err)
+		}
+		if bet > balance {
+			fmt.Println("You can not afford that, bet again.")
+			continue
+		}
+		return bet, nil
 	}
-	fmt.Println(name)
+
+}
+
+func main() {
+	balance := uint(200)
+	_, err := getPlayerName()
+	if err != nil {
+		log.Fatal("An error has occurred: %w: ", err)
+	}
+
+	for balance > 0 {
+		bet, err := getBet(balance)
+		if err != nil {
+			log.Fatal("An error has occurred: %w", err)
+		}
+		if bet == 0 {
+			break
+		}
+		balance -= bet
+	}
+	fmt.Printf("You left with $%d\n", balance)
 }
