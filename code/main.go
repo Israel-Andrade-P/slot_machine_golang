@@ -34,7 +34,32 @@ func getBet(balance uint) (uint, error) {
 
 }
 
+func generateSymbolArray(symbols map[string]uint) []string {
+	symbolsSlice := make([]string, 0)
+
+	for key, value := range symbols {
+		for i := 0; i < int(value); i++ {
+			symbolsSlice = append(symbolsSlice, key)
+		}
+	}
+	return symbolsSlice
+}
+
 func main() {
+	symbols := map[string]uint{
+		"A": 4,
+		"B": 7,
+		"C": 12,
+		"D": 20,
+	}
+
+	multipliers := map[string]uint{
+		"A": 20,
+		"B": 10,
+		"C": 5,
+		"D": 2,
+	}
+
 	balance := uint(200)
 	_, err := getPlayerName()
 	if err != nil {
