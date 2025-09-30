@@ -85,8 +85,8 @@ func printSpin(spin [][]string) {
 	}
 }
 
-func checkWin(spin [][]string, multipliers map[string]uint) []int {
-	lines := []int{}
+func checkWin(spin [][]string, multipliers map[string]uint) []uint {
+	lines := []uint{}
 
 	for _, row := range spin {
 		win := true
@@ -98,7 +98,7 @@ func checkWin(spin [][]string, multipliers map[string]uint) []int {
 			}
 		}
 		if win {
-			lines = append(lines, int(multipliers[checkSymbol]))
+			lines = append(lines, multipliers[checkSymbol])
 		} else {
 			lines = append(lines, 0)
 		}
@@ -140,7 +140,14 @@ func main() {
 		spin := getSpin(symbolSlice, 3, 3)
 		printSpin(spin)
 		winningLines := checkWin(spin, multipliers)
-		fmt.Print(winningLines)
+
+		for i, multi := range winningLines {
+			win := multi * bet
+			balance += win
+			if multi > 0 {
+				fmt.Printf("Won $%d, (%dx) on Line #%d\n", win, multi, i+1)
+			}
+		}
 	}
 	fmt.Printf("You left with $%d\n", balance)
 }
