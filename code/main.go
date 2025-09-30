@@ -73,6 +73,18 @@ func getSpin(reel []string, rows, cols int) [][]string {
 	return result
 }
 
+func printSpin(spin [][]string) {
+	for _, row := range spin {
+		for j, symbol := range row {
+			fmt.Printf(symbol)
+			if j != len(row)-1 {
+				fmt.Printf(" | ")
+			}
+		}
+		fmt.Println()
+	}
+}
+
 func main() {
 	symbols := map[string]uint{
 		"A": 4,
@@ -89,9 +101,6 @@ func main() {
 	}
 	*/
 	symbolSlice := generateSymbolArray(symbols)
-	spin := getSpin(symbolSlice, 3, 3)
-	fmt.Println(spin)
-
 	balance := uint(200)
 	_, err := getPlayerName()
 	if err != nil {
@@ -107,6 +116,9 @@ func main() {
 			break
 		}
 		balance -= bet
+		spin := getSpin(symbolSlice, 3, 3)
+		printSpin(spin)
+
 	}
 	fmt.Printf("You left with $%d\n", balance)
 }
