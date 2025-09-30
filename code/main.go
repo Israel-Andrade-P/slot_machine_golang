@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"math/rand"
 )
 
 func getPlayerName() (string, error) {
@@ -45,6 +46,33 @@ func generateSymbolArray(symbols map[string]uint) []string {
 	return symbolsSlice
 }
 
+func getRandomNumber(min, max int) int {
+	randomNum := rand.Intn(max-min+1) + min
+	return randomNum
+}
+
+func getSpin(reel []string, rows, cols int) [][]string {
+	result := make([][]string, 0)
+	for i := 0; i < rows; i++ {
+		result = append(result, []string{})
+	}
+
+	for col := 0; col < cols; col++ {
+		selected := make(map[int]struct{})
+		for row := 0; row < rows; row++ {
+			for {
+				randomIndex := getRandomNumber(0, len(reel)-1)
+				if _, ok := selected[randomIndex]; !ok {
+					result[row] = append(result[row], reel[randomIndex])
+					selected[randomIndex] = struct{}{}
+					break
+				}
+			}
+		}
+	}
+	return result
+}
+
 func main() {
 	symbols := map[string]uint{
 		"A": 4,
@@ -53,12 +81,16 @@ func main() {
 		"D": 20,
 	}
 
-	multipliers := map[string]uint{
+	/*multipliers := map[string]uint{
 		"A": 20,
 		"B": 10,
 		"C": 5,
 		"D": 2,
 	}
+	*/
+	symbolSlice := generateSymbolArray(symbols)
+	spin := getSpin(symbolSlice, 3, 3)
+	fmt.Println(spin)
 
 	balance := uint(200)
 	_, err := getPlayerName()
